@@ -11,9 +11,11 @@ import (
 )
 ```
 
-### Creating temporaries
+Quick overview at [GoDocs](https://godoc.org/github.com/Flaque/filet).
 
-#### Creating temporary directories:
+## Creating temporaries
+
+### Creating temporary directories:
 ```
 func TestFoo(t *testing.T) {
   filet.TmpDir(t, "") // Creates a temporary dir with no parent directory
@@ -21,7 +23,7 @@ func TestFoo(t *testing.T) {
 }
 ```
 
-#### Creating temporary files:
+### Creating temporary files:
 ```
 func TestFoo(t *testing.T) {
   filet.TmpFile(t, "", "") // Creates a temporary file with no parent dir
@@ -34,7 +36,7 @@ func TestFoo(t *testing.T) {
 }
 ```
 
-#### Cleaning up after yourself:
+### Cleaning up after yourself:
 Filet lets you clean up after your files with `CleanUp`, which is
 most cleanly used at the beginning of a function with `defer`. For example:
 
@@ -48,12 +50,12 @@ func TestFoo(t *testing.T) {
 
 `CleanUp` will call `t.Error` if something goes wrong when removing the file.
 
-### Helpers
+## Helpers
 
 Filet comes with a few helper functions that are useful for working with your
 temporary files.
 
-#### Checking Existence
+### Checking Existence
 You can test if a file exists if you want.
 ```
 func TestFoo(t *testing.T) {
@@ -61,7 +63,7 @@ func TestFoo(t *testing.T) {
 }
 ```
 
-#### Checking DirContains
+### Checking DirContains
 You can test if a folder contains a file or another directory.
 ```
 func TestFoo(t *testing.T) {
@@ -69,7 +71,7 @@ func TestFoo(t *testing.T) {
 }
 ```
 
-#### Checking if a FileSays what you want
+### Checking if a FileSays what you want
 You can check if a file's contents says what you want it to with `FileSays`.
 
 ```
