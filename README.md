@@ -1,6 +1,5 @@
 # Filet 🍖
-A small temporary file utility for Go for testing. Built on Afero and heavily
-inspired by the way Afero tests itself.
+A small temporary file utility for Go for testing. Built on [Afero](https://github.com/spf13/afero) and heavily inspired by the way Afero tests itself.
 
 Install via:
 `$ go get github.com/Flaque/filet`
@@ -16,19 +15,23 @@ import (
 
 #### Creating temporary directories:
 ```
-err_1 := filet.TmpDir("") // Creates a temporary dir with no parent directory
-err_2 := filet.TmpDir("myPath") // Creates a temporary dir at `myPath`
+func TestFoo(t *testing.T) {
+  filet.TmpDir(t, "") // Creates a temporary dir with no parent directory
+  filet.TmpDir(t, "myPath") // Creates a temporary dir at `myPath`
+}
 ```
 
 #### Creating temporary files:
 ```
-err_1 := filet.TmpFile("", "") // Creates a temporary file with no parent dir
+func TestFoo(t *testing.T) {
+  filet.TmpFile(t, "", "") // Creates a temporary file with no parent dir
 
-// Creates a temporary file with string "some content"
-err_2 := filet.TmpFile("", "some content")
+  // Creates a temporary file with string "some content"
+  filet.TmpFile(t, "", "some content")
 
-// Creates a temporary file with string "some content"
-err_2 := filet.TmpFile("myDir", "some content")
+  // Creates a temporary file with string "some content"
+  filet.TmpFile(t, "myDir", "some content")
+}
 ```
 
 #### Cleaning up after yourself:
@@ -36,7 +39,7 @@ Filet lets you clean up after your files with `CleanUp`, which is
 most cleanly used at the beginning of a function with `defer`. For example:
 
 ```
-func TestMyFoo(t *testing.T) {
+func TestFoo(t *testing.T) {
   defer filet.CleanUp(t)
 
   // Create a bunch of temporary stuff here
@@ -44,3 +47,33 @@ func TestMyFoo(t *testing.T) {
 ```
 
 `CleanUp` will call `t.Error` if something goes wrong when removing the file.
+
+### Helpers
+
+Filet comes with a few helper functions that are useful for working with your
+temporary files.
+
+#### Checking Existence
+You can test if a file exists if you want.
+```
+func TestFoo(t *testing.T) {
+  myBool := filet.Exists(t, "path/to/my/file")
+}
+```
+
+#### Checking DirContains
+You can test if a folder contains a file or another directory.
+```
+func TestFoo(t *testing.T) {
+  myBool := filet.DirContains(t, "path/to/myFolder", "myFile")
+}
+```
+
+#### Checking if a FileSays what you want
+You can check if a file's contents says what you want it to with `FileSays`.
+
+```
+func TestFoo(t *testing.T) {
+  myBool := filet.FileSays(t, "path/to/my/dir", []byte("my content here"))
+}
+```
