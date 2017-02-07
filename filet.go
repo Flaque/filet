@@ -8,7 +8,7 @@ import (
 )
 
 // Keeps track of files that we've used so we can clean up.
-var testRegistry []string
+var TestRegistry []string
 var appFs afero.Fs = afero.NewOsFs()
 
 /*
@@ -20,7 +20,7 @@ func TmpDir(t *testing.T, dir string) string {
   t.Error("Failed to create the tmpDir: " + name, err)
   }
 
-  testRegistry = append(testRegistry, name)
+  TestRegistry = append(TestRegistry, name)
   return name
 }
 
@@ -34,7 +34,7 @@ func TmpFile(t *testing.T, dir string, content string) afero.File {
   }
 
   file.WriteString(content)
-  testRegistry = append(testRegistry, file.Name())
+  TestRegistry = append(TestRegistry, file.Name())
 
   return file
 }
@@ -56,13 +56,13 @@ Removes all files in our test registry and calls `t.Error` if something goes
 wrong.
 */
 func CleanUp(t *testing.T) {
-  for _, path := range testRegistry {
+  for _, path := range TestRegistry {
   if err := appFs.RemoveAll(path); err != nil {
   t.Error(appFs.Name(), err)
   }
   }
 
-  testRegistry = make([]string, 0)
+  TestRegistry = make([]string, 0)
 }
 
 /*
