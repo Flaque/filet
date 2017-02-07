@@ -63,8 +63,8 @@ func TestDirContains(t *testing.T) {
 func TestCleanUp(t *testing.T) {
   defer CleanUp(t) // Kind of problematic.
 
-  // Clear TestRegistry
-  TestRegistry = make([]string, 0)
+  // Clear Files
+  Files = make([]string, 0)
 
   // Create test files
   dir := TmpDir(t, "")

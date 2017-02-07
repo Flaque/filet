@@ -50,11 +50,11 @@ func TestFoo(t *testing.T) {
 
 `CleanUp` will call `t.Error` if something goes wrong when removing the file.
 
-You can also access the `TestRegistry` itself if you want to add a specificly
+You can also access the `Files` itself if you want to add a specificly
 named file to the cleanup list.
 
 ```
-filet.TestRegistry = append(filet.TestRegistry, "path/to/my/named/file")
+filet.Files = append(filet.Files, "path/to/my/named/file")
 ```
 
 ## Helpers
