@@ -11,6 +11,8 @@ import (
 )
 ```
 
+Quick overview at [GoDocs](https://godoc.org/github.com/Flaque/filet).
+
 ## Creating temporaries
 
 ### Creating temporary directories:
