@@ -1,4 +1,4 @@
-# Filet
+# Filet 🍖
 A small temporary file utility for Go for testing. Built on Afero and heavily
 inspired by the way Afero tests itself.
 
