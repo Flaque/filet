@@ -32,8 +32,8 @@ func TestTmpFile(t *testing.T) {
 func TestFileSays(t *testing.T) {
 	defer CleanUp(t)
 
-	file := TmpFile(t, "", "Ghandi")
-	assert.Equal(t, FileSays(t, file.Name(), []byte("Ghandi")), true,
+	file := TmpFile(t, "", "Gandhi")
+	assert.Equal(t, FileSays(t, file.Name(), []byte("Gandhi")), true,
 		"FileSays can correctly read a file.")
 	assert.Equal(t, FileSays(t, file.Name(), []byte("nope!")), false,
 		"FileSays can correctly tell when a file does not contain content.")

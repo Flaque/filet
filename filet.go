@@ -7,12 +7,12 @@ import (
 	"testing"
 )
 
-// Keeps track of files that we've used so we can clean up.
+// Files keeps track of files that we've used so we can clean up.
 var Files []string
-var appFs afero.Fs = afero.NewOsFs()
+var appFs = afero.NewOsFs()
 
 /*
-Creates a tmp directory for us to use.
+TmpDir Creates a tmp directory for us to use.
 */
 func TmpDir(t *testing.T, dir string) string {
 	name, err := afero.TempDir(appFs, dir, "dir")
@@ -25,7 +25,7 @@ func TmpDir(t *testing.T, dir string) string {
 }
 
 /*
-Creates a tmp file for us to use when testing
+TmpFile Creates a tmp file for us to use when testing
 */
 func TmpFile(t *testing.T, dir string, content string) afero.File {
 	file, err := afero.TempFile(appFs, dir, "file")
@@ -40,7 +40,8 @@ func TmpFile(t *testing.T, dir string, content string) afero.File {
 }
 
 /*
-Returns true if the file at the path contains the expected byte array content.
+FileSays returns true if the file at the path contains the expected byte array
+content.
 */
 func FileSays(t *testing.T, path string, expected []byte) bool {
 	content, err := afero.ReadFile(appFs, path)
@@ -52,7 +53,7 @@ func FileSays(t *testing.T, path string, expected []byte) bool {
 }
 
 /*
-Removes all files in our test registry and calls `t.Error` if something goes
+CleanUp removes all files in our test registry and calls `t.Error` if something goes
 wrong.
 */
 func CleanUp(t *testing.T) {
@@ -66,7 +67,7 @@ func CleanUp(t *testing.T) {
 }
 
 /*
-Returns true if the file exists. Calls t.Error if something goes wrong while
+Exists returns true if the file exists. Calls t.Error if something goes wrong while
 checking.
 */
 func Exists(t *testing.T, path string) bool {
@@ -78,8 +79,8 @@ func Exists(t *testing.T, path string) bool {
 }
 
 /*
-Returns true if the dir contains the path. Calls t.Error if something goes wrong while
-checking.
+DirContains returns true if the dir contains the path. Calls t.Error if
+something goes wrong while checking.
 */
 func DirContains(t *testing.T, dir string, path string) bool {
 	fullPath := filepath.Join(dir, path)
