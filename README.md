@@ -1,5 +1,5 @@
 # Filet 🍖
-A small temporary file utility for Go for testing. Built on [Afero](https://github.com/spf13/afero) and heavily inspired by the way Afero tests itself.
+A small temporary file utility for Go testing. Built on [Afero](https://github.com/spf13/afero) and heavily inspired by the way Afero tests itself.
 
 Install via:
 `$ go get github.com/Flaque/filet`
