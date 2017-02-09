@@ -37,6 +37,11 @@ func TestFileSays(t *testing.T) {
 		"FileSays can correctly read a file.")
 	assert.Equal(t, FileSays(t, file.Name(), []byte("nope!")), false,
 		"FileSays can correctly tell when a file does not contain content.")
+
+	newT := testing.T{}
+	FileSays(&newT, "IdontEx", []byte("hi"))
+	assert.Equal(t, newT.Failed(), true,
+		"FileSays should fail the testing interface")
 }
 
 func TestExists(t *testing.T) {
