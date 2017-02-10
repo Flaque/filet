@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/Flaque/filet.svg?branch=master)](https://travis-ci.org/Flaque/filet)
+[![Go Report Card](https://goreportcard.com/badge/github.com/flaque/filet)](https://goreportcard.com/report/github.com/flaque/filet)
+
 # Filet 🍖
 A small temporary file utility for Go testing. Built on [Afero](https://github.com/spf13/afero) and heavily inspired by the way Afero tests itself.
 
