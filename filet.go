@@ -2,9 +2,11 @@ package filet
 
 import (
 	"bytes"
-	"github.com/spf13/afero"
+	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/spf13/afero"
 )
 
 // Files keeps track of files that we've used so we can clean up.
@@ -31,6 +33,22 @@ func TmpFile(t *testing.T, dir string, content string) afero.File {
 	file, err := afero.TempFile(appFs, dir, "file")
 	if err != nil {
 		t.Error("Failed to create the tmpFile: "+file.Name(), err)
+	}
+
+	file.WriteString(content)
+	Files = append(Files, file.Name())
+
+	return file
+}
+
+/*
+File Creates a specified file for us to use when testing
+*/
+func File(t *testing.T, path string, content string) afero.File {
+	file, err := appFs.OpenFile(path, os.O_RDWR|os.O_CREATE, 0600)
+	if err != nil {
+		t.Error("Failed to create the file: "+path, err)
+		return nil
 	}
 
 	file.WriteString(content)

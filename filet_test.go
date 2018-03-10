@@ -1,9 +1,11 @@
 package filet
 
 import (
-	"github.com/stretchr/testify/assert"
 	"path/filepath"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestTmpDir(t *testing.T) {
@@ -27,6 +29,19 @@ func TestTmpFile(t *testing.T) {
 	result := FileSays(t, file.Name(), []byte("hey there"))
 	assert.Equal(t, result, true,
 		"TmpFile should create a file with content")
+}
+
+func TestFile(t *testing.T) {
+	defer CleanUp(t)
+
+	// Test that file is actually created
+	file := File(t, "conf.yaml", "")
+	require.FileExists(t, file.Name(), "File should create the file")
+
+	// Test that the content exists in the file
+	file = File(t, "conf.yaml", "hey there")
+	result := FileSays(t, file.Name(), []byte("hey there"))
+	assert.True(t, result, "File should create a file with content")
 }
 
 func TestFileSays(t *testing.T) {

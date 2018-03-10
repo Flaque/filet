@@ -39,6 +39,16 @@ func TestFoo(t *testing.T) {
 }
 ```
 
+### Creating specified files:
+```
+func TestFoo(t *testing.T) {
+  filet.File(t, "conf.yaml", "") // Creates a specified file
+
+  // Creates a specified file with string "some content"
+  filet.File(t, "/tmp/conf.yaml", "some content")
+}
+```
+
 ### Cleaning up after yourself:
 Filet lets you clean up after your files with `CleanUp`, which is
 most cleanly used at the beginning of a function with `defer`. For example:
