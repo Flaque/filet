@@ -34,6 +34,7 @@ TmpFile Creates a tmp file for us to use when testing
 */
 func TmpFile(t TestReporter, dir string, content string) afero.File {
 	file, err := afero.TempFile(appFs, dir, "file")
+	defer file.Close()
 
 	if err != nil {
 		t.Error("Failed to create the tmpFile: "+file.Name(), err)
@@ -50,6 +51,8 @@ File Creates a specified file for us to use when testing
 */
 func File(t TestReporter, path string, content string) afero.File {
 	file, err := appFs.OpenFile(path, os.O_RDWR|os.O_CREATE, 0600)
+	defer file.Close()
+
 	if err != nil {
 		t.Error("Failed to create the file: "+path, err)
 		return nil
