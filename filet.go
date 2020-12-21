@@ -2,9 +2,11 @@ package filet
 
 import (
 	"bytes"
-	"github.com/spf13/afero"
 	"os"
 	"path/filepath"
+	"sync"
+
+	"github.com/spf13/afero"
 )
 
 // TestReporter can be used to report test failures. It is satisfied by the standard library's *testing.T.
@@ -12,9 +14,9 @@ type TestReporter interface {
 	Error(args ...interface{})
 }
 
-// Files keeps track of files that we've used so we can clean up.
-var Files []string
+var files = map[TestReporter][]string{}
 var appFs = afero.NewOsFs()
+var lock = sync.RWMutex{}
 
 /*
 TmpDir Creates a tmp directory for us to use.
@@ -25,7 +27,7 @@ func TmpDir(t TestReporter, dir string) string {
 		t.Error("Failed to create the tmpDir: "+name, err)
 	}
 
-	Files = append(Files, name)
+	Append(t, name)
 	return name
 }
 
@@ -41,7 +43,7 @@ func TmpFile(t TestReporter, dir string, content string) afero.File {
 	}
 
 	file.WriteString(content)
-	Files = append(Files, file.Name())
+	Append(t, file.Name())
 
 	return file
 }
@@ -59,7 +61,7 @@ func File(t TestReporter, path string, content string) afero.File {
 	}
 
 	file.WriteString(content)
-	Files = append(Files, file.Name())
+	Append(t, file.Name())
 
 	return file
 }
@@ -82,13 +84,16 @@ CleanUp removes all files in our test registry and calls `t.Error` if something 
 wrong.
 */
 func CleanUp(t TestReporter) {
-	for _, path := range Files {
+	lock.Lock()
+	paths := files[t]
+	delete(files, t)
+	lock.Unlock()
+
+	for _, path := range paths {
 		if err := appFs.RemoveAll(path); err != nil {
 			t.Error(appFs.Name(), err)
 		}
 	}
-
-	Files = make([]string, 0)
 }
 
 /*
@@ -110,4 +115,30 @@ something goes wrong while checking.
 func DirContains(t TestReporter, dir string, path string) bool {
 	fullPath := filepath.Join(dir, path)
 	return Exists(t, fullPath)
+}
+
+/*
+Files keeps track of files that we've used so we can clean up.
+*/
+func Files(t TestReporter) []string {
+	lock.RLock()
+	defer lock.RUnlock()
+
+	return files[t]
+}
+
+/*
+Append adds a path to the files we need to clean up.
+*/
+func Append(t TestReporter, path string) {
+	lock.Lock()
+	defer lock.Unlock()
+
+	v, ok := files[t]
+
+	if ok {
+		files[t] = append(v, path)
+	} else {
+		files[t] = []string{path}
+	}
 }

@@ -63,11 +63,15 @@ func TestFoo(t *testing.T) {
 
 `CleanUp` will call `t.Error` if something goes wrong when removing the file.
 
-You can also access the `Files` itself if you want to add a specificly
-named file to the cleanup list.
+You can also access the `Files` itself if you want to check the content, or add
+a specificly named file to the cleanup list.
 
 ```
-filet.Files = append(filet.Files, "path/to/my/named/file")
+fmt.Printf("%#v\n", filet.Files(t))
+
+filet.Append(t, "path/to/my/named/file")
+
+fmt.Printf("%#v\n", filet.Files(t))
 ```
 
 ## Helpers
