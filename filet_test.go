@@ -3,12 +3,15 @@ package filet
 import (
 	"path/filepath"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
 func TestTmpDir(t *testing.T) {
+	t.Parallel()
+
 	defer CleanUp(t)
 
 	path := TmpDir(t, "")
@@ -17,6 +20,8 @@ func TestTmpDir(t *testing.T) {
 }
 
 func TestTmpFile(t *testing.T) {
+	t.Parallel()
+
 	defer CleanUp(t)
 
 	// Test that file is actually created
@@ -32,6 +37,8 @@ func TestTmpFile(t *testing.T) {
 }
 
 func TestFile(t *testing.T) {
+	t.Parallel()
+
 	defer CleanUp(t)
 
 	// Test that file is actually created
@@ -45,6 +52,8 @@ func TestFile(t *testing.T) {
 }
 
 func TestFileSays(t *testing.T) {
+	t.Parallel()
+
 	defer CleanUp(t)
 
 	file := TmpFile(t, "", "Gandhi")
@@ -60,6 +69,8 @@ func TestFileSays(t *testing.T) {
 }
 
 func TestExists(t *testing.T) {
+	t.Parallel()
+
 	defer CleanUp(t)
 
 	file := TmpFile(t, "", "I exist")
@@ -70,6 +81,8 @@ func TestExists(t *testing.T) {
 }
 
 func TestDirContains(t *testing.T) {
+	t.Parallel()
+
 	defer CleanUp(t)
 
 	dir := TmpDir(t, "")
@@ -81,10 +94,9 @@ func TestDirContains(t *testing.T) {
 }
 
 func TestCleanUp(t *testing.T) {
-	defer CleanUp(t) // Kind of problematic.
+	t.Parallel()
 
-	// Clear Files
-	Files = make([]string, 0)
+	defer CleanUp(t) // Kind of problematic.
 
 	// Create test files
 	dir := TmpDir(t, "")
@@ -99,4 +111,29 @@ func TestCleanUp(t *testing.T) {
 	newDir := TmpDir(t, "")
 	assert.Equal(t, Exists(t, newDir), true,
 		"New files still exist after CleanUp")
+}
+
+func TestCleanUpEmpty(t *testing.T) {
+	t.Parallel()
+
+	defer CleanUp(t)
+}
+
+func TestMain(t *testing.T) {
+	theTest(t)
+}
+
+func TestMain2(t *testing.T) {
+	theTest(t)
+}
+
+func theTest(t *testing.T) {
+	t.Parallel()
+
+	defer CleanUp(t)
+
+	TmpDir(t, "")
+
+	time.Sleep(20 * time.Millisecond)
+	assert.Len(t, Files(t), 1)
 }
