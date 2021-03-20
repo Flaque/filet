@@ -47,6 +47,23 @@ func TmpFile(t TestReporter, dir string, content string) afero.File {
 }
 
 /*
+TmpBinFile Creates a tmp file we can write byte slice to for us to use when testing
+*/
+func TmpBinFile(t TestReporter, dir string, content []byte) afero.File {
+	file, err := afero.TempFile(appFs, dir, "file")
+	defer file.Close()
+
+	if err != nil {
+		t.Error("Failed to create the tmpFile: "+file.Name(), err)
+	}
+
+	file.Write(content)
+	Files = append(Files, file.Name())
+
+	return file
+}
+
+/*
 File Creates a specified file for us to use when testing
 */
 func File(t TestReporter, path string, content string) afero.File {
