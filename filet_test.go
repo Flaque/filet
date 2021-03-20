@@ -31,6 +31,22 @@ func TestTmpFile(t *testing.T) {
 		"TmpFile should create a file with content")
 }
 
+func TestTmpBinFile(t *testing.T) {
+	defer CleanUp(t)
+
+	// Test that file is actually created
+	file := TmpBinFile(t, "", []byte(""))
+	assert.Equal(t, Exists(t, file.Name()), true,
+		"TmpFile should create the file")
+
+	// Test that the content exists in the file
+	file = TmpBinFile(t, "", []byte("hey there"))
+	result := FileSays(t, file.Name(), []byte("hey there"))
+	assert.Equal(t, result, true,
+		"TmpFile should create a file with content")
+}
+
+
 func TestFile(t *testing.T) {
 	defer CleanUp(t)
 
